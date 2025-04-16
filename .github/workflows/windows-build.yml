@@ -1,0 +1,21 @@
+name: Windows C++ Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up MSBuild path
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Build the solution
+      run: msbuild CPPSamples.sln /p:Configuration=Release
