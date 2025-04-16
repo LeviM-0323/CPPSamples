@@ -30,3 +30,24 @@
 *.exe
 *.out
 *.app
+=======
+# Ignore Visual Studio temporary files
+.vs/
+*.user
+*.suo
+*.VC.db
+*.opendb
+*.opensdf
+*.sdf
+*.cache
+*.log
+*.tlog
+*.obj
+*.pdb
+*.exe
+*.ilk
+Debug/
+Release/
+x64/
+x86/
+>>>>>>> 5ee679d (Added several projects)
