@@ -19,3 +19,12 @@ jobs:
 
     - name: Build the solution
       run: msbuild CPPSamples.sln /p:Configuration=Release
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: cpp-executables
+        path: |
+          **/Release/*.exe
+          **/Release/*.dll
+          **/Release/*.pdb
