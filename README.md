@@ -20,6 +20,8 @@ A collection of C++ projects built in Visual Studio 2022.
 2. Open `CPPSamples.sln` in Visual Studio
 3. Build and run any project you like!
 
+![Build](https://github.com/LeviM-0323/CPPSamples/actions/workflows/windows-build.yml/badge.svg)
+
 ## 🚀 Future Plans
 
 - Add more sample projects
