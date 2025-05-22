@@ -7,10 +7,11 @@ A collection of C++ projects built in Visual Studio 2022.
 - **CPPSamples** – Small object oriented C++ samples
 - **SortingTests** – Testing the speeds of sorting algorithms
 - **FakeGambling** – Fake slot machine simulator
+- **FileUtility** - File viewing/sorting command-line utility
 
 ## 🧰 Tech Stack
 
-- C++
+- C++ 17
 - Visual Studio 2022
 - Windows 10/11
 
