@@ -18,8 +18,8 @@ jobs:
       uses: microsoft/setup-msbuild@v2
 
     - name: Build the solution
-      run: msbuild CPPSamples.sln /p:Configuration=Release
-
+      run:  msbuild CPPSamples.sln /p:Configuration=Release /p:Platform=x64 /p:LanguageStandard=stdcpp17
+      
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
