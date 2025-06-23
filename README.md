@@ -13,7 +13,7 @@ A collection of C++ projects built in Visual Studio 2022.
 ## 🧰 Tech Stack
 
 - C++ 17
-- Visual Studio 2022
+- Visual Studio 2022 Community
 - Windows 10/11
 
 ## 🔨 Builds
