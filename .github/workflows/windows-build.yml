@@ -33,6 +33,6 @@ jobs:
         name: "Latest Build"
         body: "Automated build from push to `main`."
         prerelease: false
-        files: cpp_build_artifacts.zip
+        files: cpp-executables.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
