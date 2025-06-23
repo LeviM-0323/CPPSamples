@@ -30,7 +30,7 @@ jobs:
       uses: softprops/action-gh-release@v2
       with:
         tag_name: ${{ github.sha }}
-        release_name: "Latest Build"
+        name: "Latest Build"
         body: "Automated build from push to `main`."
         prerelease: false
         files: cpp_build_artifacts.zip
