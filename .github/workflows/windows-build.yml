@@ -44,4 +44,4 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     strategy:
       matrix:
-        file: ${{ fromJson('[' + steps.exes.outputs.files.replace(',', '","') + ']') }}
+        file: ${{ fromJson(format('[{0}]', steps.exes.outputs.files)) }}

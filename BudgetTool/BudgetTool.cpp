@@ -54,7 +54,7 @@ void addItem() {
 
 	cout << "------------------------Adding Item------------------------\n";
 	cout << "Item name: ";
-	cin >> itemName;
+	getline(cin, itemName);
 	newItem.setName(itemName);
 
 	cout << "Item amount: $";
@@ -137,7 +137,6 @@ void adjustItem() {
 	int itemToAdjust, thingToAdjust;
 	string newName;
 	double newAmount;
-	bool newExpense;
 	int newFrequency;
 
 	viewItems();
@@ -148,7 +147,7 @@ void adjustItem() {
 
 	if (thingToAdjust == 1) {
 		cout << "Enter new name: ";
-		cin >> newName;
+		getline(cin, newName);
 		budgetList.at(itemToAdjust).setName(newName);
 	}
 	else if (thingToAdjust == 2) {
@@ -249,7 +248,7 @@ void clearList() {
 	string confirmString;
 	cout << "------------------------Deleting Items------------------------\n";
 	cout << "Type 'confirm' to continue: ";
-	cin >> confirmString;
+	getline(cin, confirmString);
 	if (confirmString == "confirm") {
 		cout << budgetList.size() << " items removed." << endl << endl;
 		budgetList.clear();
