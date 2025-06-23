@@ -2,8 +2,8 @@ name: Windows C++ Build and Release
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - '**'
 
 jobs:
   build-and-release:
