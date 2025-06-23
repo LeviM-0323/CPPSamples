@@ -6,7 +6,7 @@
  * Users can add new items, view all items with totals, and adjust existing items (name, amount, type, frequency).
  * The application provides a simple text-based menu for user interaction.
  *
- * @author Levi McLean (LeviM0323)
+ * @author Levi McLean (LeviM0323 on GitHub)
  * @date June 23rd, 2025
  */
 
