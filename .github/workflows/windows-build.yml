@@ -1,4 +1,4 @@
-name: Windows C++ Build
+name: Windows C++ Build and Release
 
 on:
   push:
@@ -20,11 +20,19 @@ jobs:
     - name: Build the solution
       run:  msbuild CPPSamples.sln /p:Configuration=Release /p:Platform=x64 /p:LanguageStandard=stdcpp17
       
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v4
+    - name: Archive artifacts
+      run: |
+        mkdir release
+        Get-ChildItem -Path . -Recurse -Include *.exe, *.dll, *.pdb -Filter Release | Copy-Item -Destination release -Force
+        Compress-Archive -Path release\* -DestinationPath cpp_build_artifacts.zip
+
+    - name: Create or update GitHub release
+      uses: softprops/action-gh-release@v2
       with:
-        name: cpp-executables
-        path: |
-          **/Release/*.exe
-          **/Release/*.dll
-          **/Release/*.pdb
+        tag_name: ${{ github.sha }}
+        release_name: "Latest Build"
+        body: "Automated build from push to `main`."
+        prerelease: false
+        files: cpp_build_artifacts.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

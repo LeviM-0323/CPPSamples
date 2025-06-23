@@ -7,7 +7,7 @@
  * for setting and retrieving these properties, as well as for calculating the monthly value
  * based on frequency and printing item details.
  *
- * @author Levi McLean (LeviM0323)
+ * @author Levi McLean (LeviM0323 on Github)
  * @date June 23rd, 2025
  */
 
