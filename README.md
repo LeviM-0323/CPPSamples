@@ -8,6 +8,7 @@ A collection of C++ projects built in Visual Studio 2022.
 - **SortingTests** – Testing the speeds of sorting algorithms
 - **FakeGambling** – Fake slot machine simulator
 - **FileUtility** - File viewing/sorting command-line utility
+- **BudgetTool** - Tool for calculating monthly budget
 
 ## 🧰 Tech Stack
 
