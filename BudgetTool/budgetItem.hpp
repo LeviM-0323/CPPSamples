@@ -13,6 +13,7 @@
 
 #include <iostream>
 #include <string>
+#include <iomanip>
 
 using namespace std;
 
@@ -120,29 +121,49 @@ public:
   * @brief Prints the details of the budget item to the standard output.
   */
 	void printItem() {
-		cout << "Name: " << name << endl;
-		cout << "Amount: $" << amount << endl;
-
-		if (expense == 0) {
-			cout << "Type: Income" << endl;
-		}
-		else {
-			cout << "Type: Expense" << endl;
-		}
+		cout << "|----| " << name << " ";
+		cout << "|-----| $" << amount << " ";
 
 		if (frequency == 1) {
-			cout << "Frequency: weekly" << endl;
+			cout << "|-----| Weekly ";
 		}
 		else if (frequency == 2) {
-			cout << "Frequency: bi-weekly" << endl;
+			cout << "|-----| Bi-weekly ";
 		}
 		else if (frequency == 3) {
-			cout << "Frequency: monthly" << endl;
+			cout << "|-----| Monthly ";
 		}
 		else {
-			cout << "Frequency: yearly" << endl;
+			cout << "|-----| Yearly ";
 		}
 
+		if (expense == 0) {
+			cout << "|-----| Income |----|";
+		}
+		else {
+			cout << "|------| Expense |----|";
+		}
 		cout << endl;
+	}
+
+	/**
+	* @brief Prints the details of the budget item to the standard output with alignment.
+	* @param index The index of the item in the budget list (default: -1).
+	*/
+	void printItem(int index = -1) const {
+		cout << "| " << setw(2) << (index >= 0 ? to_string(index) : "")
+			 << "| " << setw(18) << left << name
+			 << "| $" << setw(9) << right << fixed << setprecision(2) << amount << left
+			 << "| " << setw(10);
+
+		switch (frequency) {
+			case 1: cout << "Weekly"; break;
+			case 2: cout << "Bi-weekly"; break;
+			case 3: cout << "Monthly"; break;
+			case 4: cout << "Yearly"; break;
+			default: cout << "Unknown"; break;
+		}
+
+		cout << "| " << setw(8) << (expense ? "Expense" : "Income") << "|" << endl;
 	}
 };

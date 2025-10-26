@@ -11,6 +11,7 @@
  */
 
 #include "budgetItem.hpp"
+#include "user.hpp"
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
@@ -21,12 +22,23 @@
 #include <cstdlib>
 
 int menuOption;
+User currentUser;
+const string userFile = "user.txt";
 vector<budgetItem> budgetList;
 
 /**
  * @brief Prints the main menu and gets the user's menu option.
  */
 void printMenu() {
+	auto now = chrono::system_clock::now();
+	time_t now_c = chrono::system_clock::to_time_t(now);
+	time_t last_c = chrono::system_clock::to_time_t(currentUser.getLastLogin());
+	cout << "User: " << currentUser.getName() << endl;
+	tm localTime;
+	localtime_s(&localTime, &now_c);
+	cout << "Current date: " << put_time(&localTime, "%Y-%m-%d %H:%M:%S") << endl;
+	cout << "Last login: " << put_time(&localTime, "%Y-%m-%d %H:%M:%S") << endl;
+	cout << "----------------------------------------------------------" << endl;
 	cout << "1. Add income/expense item\n";
 	cout << "2. View income/expenses\n";
 	cout << "3. Adjust income/expense item\n";
@@ -54,6 +66,7 @@ void addItem() {
 
 	cout << "------------------------Adding Item------------------------\n";
 	cout << "Item name: ";
+	cin.ignore();
 	getline(cin, itemName);
 	newItem.setName(itemName);
 
@@ -106,22 +119,41 @@ void addItem() {
  * Iterates through the budget list, prints each item, and calculates totals.
  */
 void viewItems() {
-	cout << "------------------------Viewing Items------------------------\n";
+	cout << "-------------------------Viewing Items--------------------------\n";
+	cout << left
+	     << "+" << setw(4) << setfill('-') << "" << "+"
+	     << setw(20) << "" << "+"
+	     << setw(12) << "" << "+"
+	     << setw(12) << "" << "+"
+	     << setw(10) << "" << "+" << setfill(' ') << endl;
+
+	cout << setfill(' ')
+	     << "| " << setw(2) << "#" 
+	     << "| " << setw(18) << "Name"
+	     << "| " << setw(10) << "Amount"
+	     << "| " << setw(10) << "Frequency"
+	     << "| " << setw(8) << "Type" << "|" << endl;
+
+	cout << "+" << setw(4) << setfill('-') << "" << "+"
+	     << setw(20) << "" << "+"
+	     << setw(12) << "" << "+"
+	     << setw(12) << "" << "+"
+	     << setw(10) << "" << "+" << setfill(' ') << endl;
+
 	double totalIncome = 0.00, totalExpenses = 0.00, remainingMonthly = 0.00;
 	for (int i = 0; i < budgetList.size(); i++) {
-		budgetItem currentItem = budgetList.at(i);
-		cout << "Item #" << i << endl;
-		currentItem.printItem();
+		budgetList[i].printItem(i);
 
-		if (currentItem.isExpense()) {
-			totalExpenses += currentItem.getAmount();
+		if (budgetList[i].isExpense()) {
+			totalExpenses += budgetList[i].getAmount();
 		}
 		else {
-			totalIncome += currentItem.getAmount();
+			totalIncome += budgetList[i].getAmount();
 		}
 		remainingMonthly = totalIncome - totalExpenses;
 	}
 
+	cout << endl;
 	cout << "Total income: $" << totalIncome << endl;
 	cout << "Total expenses: $" << totalExpenses << endl;
 	cout << "Remaining Monthly: $" << remainingMonthly << endl;
@@ -313,6 +345,24 @@ void saveItems() {
 	outFile.close();
 }
 
+void newUser() {
+	cout << "No previous data was found, welcome new user. Please start by giving us your name: ";
+	string name;
+	getline(cin, name);
+	currentUser = User(name);
+	currentUser.saveToFile(userFile);
+}
+
+void loadOrCreateUser() {
+	if (!currentUser.loadFromFile(userFile)) {
+		newUser();
+	}
+	else {
+		currentUser.updateLastLogin();
+		currentUser.saveToFile(userFile);
+	}
+}
+
 /**
  * @brief Load the data from the text file upon launch
  *
@@ -322,7 +372,6 @@ void loadItems() {
 	ifstream inFile("data.txt");
 
 	if (!inFile) {
-		cout << "No previous data found. Starting fresh..." << endl;
 		return;
 	}
 
@@ -349,22 +398,7 @@ void loadItems() {
  * @return int Returns 0 on successful execution, 1 on error.
  */
 int main() {
-	cout << R"(
-
-                    ___          _____          ___           ___                                            ___           ___                   
-     _____         /__/\        /  /::\        /  /\         /  /\          ___                  ___        /  /\         /  /\                  
-    /  /::\        \  \:\      /  /:/\:\      /  /:/_       /  /:/_        /  /\                /  /\      /  /::\       /  /::\                 
-   /  /:/\:\        \  \:\    /  /:/  \:\    /  /:/ /\     /  /:/ /\      /  /:/               /  /:/     /  /:/\:\     /  /:/\:\    ___     ___ 
-  /  /:/~/::\   ___  \  \:\  /__/:/ \__\:|  /  /:/_/::\   /  /:/ /:/_    /  /:/               /  /:/     /  /:/  \:\   /  /:/  \:\  /__/\   /  /\
- /__/:/ /:/\:| /__/\  \__\:\ \  \:\ /  /:/ /__/:/__\/\:\ /__/:/ /:/ /\  /  /::\              /  /::\    /__/:/ \__\:\ /__/:/ \__\:\ \  \:\ /  /:/
- \  \:\/:/~/:/ \  \:\ /  /:/  \  \:\  /:/  \  \:\ /~~/:/ \  \:\/:/ /:/ /__/:/\:\            /__/:/\:\   \  \:\ /  /:/ \  \:\ /  /:/  \  \:\  /:/ 
-  \  \::/ /:/   \  \:\  /:/    \  \:\/:/    \  \:\  /:/   \  \::/ /:/  \__\/  \:\           \__\/  \:\   \  \:\  /:/   \  \:\  /:/    \  \:\/:/  
-   \  \:\/:/     \  \:\/:/      \  \::/      \  \:\/:/     \  \:\/:/        \  \:\               \  \:\   \  \:\/:/     \  \:\/:/      \  \::/   
-    \  \::/       \  \::/        \__\/        \  \::/       \  \::/          \__\/                \__\/    \  \::/       \  \::/        \__\/    
-     \__\/         \__\/                       \__\/         \__\/                                          \__\/         \__\/                  
-
-)";
-
+	loadOrCreateUser();
 	loadItems();
 	printMenu();
 

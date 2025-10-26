@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{164832bf-1954-46aa-bd46-bf9a724e05e8}</ProjectGuid>
-    <RootNamespace>BudgetTool</RootNamespace>
+    <ProjectGuid>{4dae5f6a-2705-4222-ae1c-f79d9bd18490}</ProjectGuid>
+    <RootNamespace>ShinobiSim</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -93,8 +93,6 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -104,7 +102,6 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -122,17 +119,20 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="budgetItem.hpp" />
-    <ClInclude Include="user.hpp" />
+    <ClCompile Include="App.cpp" />
+    <ClCompile Include="KekkeiGenkai.h" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Shinobi.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BudgetTool.cpp" />
+    <ClInclude Include="Clan.h" />
+    <ClInclude Include="Jutsu.h" />
+    <ClInclude Include="Shinobi.h" />
+    <ClInclude Include="Village.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
