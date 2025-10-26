@@ -70,11 +70,12 @@ void addItem() {
 		newItem.setIncome();
 	}
 	else {
-		cout << "Incorrect value, assuming expense...";
+		cout << "Incorrect value, assuming expense...\n";
 		newItem.setExpense();
 	}
 
 	cout << "Item frequency (1 for weekly, 2 for bi-weekly, 3 for monthly, 4 for yearly): ";
+	cin.ignore();
 	cin >> itemFrequency;
 	if (itemFrequency == 1) {
 		newItem.setFrequency(1);
