@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install build tools
-        run: sudo apt-get update && sudo apt-get install -y g++ zip
+        run: sudo apt-get update && sudo apt-get install -y g++
 
       - name: Build projects
         shell: bash
@@ -45,16 +45,6 @@ jobs:
             g++ -std=c++17 -O2 -pthread "${source_files[@]}" -o "$staging_dir/$project_name"
           done
 
-      - name: Package source archive
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          source_archive="$RUNNER_TEMP/CppSamples-source-${GITHUB_SHA}.zip"
-          git ls-files '*.cpp' '*.hpp' '*.h' '*.sln' '*.vcxproj' '*.filters' 'README.md' '.github/workflows/*.yml' > "$RUNNER_TEMP/source-files.txt"
-          zip -q -@ "$source_archive" < "$RUNNER_TEMP/source-files.txt"
-          echo "SOURCE_ARCHIVE=$source_archive" >> "$GITHUB_ENV"
-
       - name: Upload Linux release assets
         uses: softprops/action-gh-release@v2
         with:
@@ -62,7 +52,6 @@ jobs:
           name: CI build ${{ github.sha }}
           files: |
             ${{ runner.temp }}/linux/*
-            ${{ env.SOURCE_ARCHIVE }}
           overwrite_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

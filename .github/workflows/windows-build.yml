@@ -16,12 +16,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
       - name: Build projects
-        shell: pwsh
+        shell: cmd
         run: |
-          $stagingDir = Join-Path $env:RUNNER_TEMP 'windows'
-          New-Item -ItemType Directory -Force -Path $stagingDir | Out-Null
-          msbuild .\CppSamples.sln /p:Configuration=Release /p:Platform=x64 /p:OutDir="$stagingDir\" /p:LanguageStandard=stdcpp17
+          if not exist "%RUNNER_TEMP%\windows" mkdir "%RUNNER_TEMP%\windows"
+          msbuild .\CppSamples.sln /p:Configuration=Release /p:Platform=x64 /p:OutDir="%RUNNER_TEMP%\windows\" /p:LanguageStandard=stdcpp17
 
       - name: Upload Windows release assets
         uses: softprops/action-gh-release@v2
