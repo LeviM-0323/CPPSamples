@@ -21,6 +21,19 @@
 #include <ctime>
 #include <cstdlib>
 
+namespace {
+	tm make_local_time(time_t value) {
+		tm localTime{};
+#ifdef _WIN32
+		localtime_s(&localTime, &value);
+#else
+		localtime_r(&value, &localTime);
+#endif
+		return localTime;
+	}
+
+}
+
 int menuOption;
 User currentUser;
 const string userFile = "user.txt";
@@ -33,11 +46,11 @@ void printMenu() {
 	auto now = chrono::system_clock::now();
 	time_t now_c = chrono::system_clock::to_time_t(now);
 	time_t last_c = chrono::system_clock::to_time_t(currentUser.getLastLogin());
+	tm nowTime = make_local_time(now_c);
+	tm lastTime = make_local_time(last_c);
 	cout << "User: " << currentUser.getName() << endl;
-	tm localTime;
-	localtime_s(&localTime, &now_c);
-	cout << "Current date: " << put_time(&localTime, "%Y-%m-%d %H:%M:%S") << endl;
-	cout << "Last login: " << put_time(&localTime, "%Y-%m-%d %H:%M:%S") << endl;
+	cout << "Current date: " << put_time(&nowTime, "%Y-%m-%d %H:%M:%S") << endl;
+	cout << "Last login: " << put_time(&lastTime, "%Y-%m-%d %H:%M:%S") << endl;
 	cout << "----------------------------------------------------------" << endl;
 	cout << "1. Add income/expense item\n";
 	cout << "2. View income/expenses\n";

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <cmath>
 #include <memory>
 #include "Jutsu.h"
 #include "Village.h"

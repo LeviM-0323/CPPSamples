@@ -11,10 +11,25 @@ Purpose: This project will act as a simple file utility in C++ ran from the comm
 #include <filesystem>
 #include <chrono>
 #include <ctime>
+#include <algorithm>
+#include <vector>
 #define _CRT_SECURE_NO_WARNINGS
 
 using namespace std;
 namespace fs = std::filesystem;
+
+namespace {
+	tm make_local_time(time_t value) {
+		tm localTime{};
+#ifdef _WIN32
+		localtime_s(&localTime, &value);
+#else
+		localtime_r(&value, &localTime);
+#endif
+		return localTime;
+	}
+
+}
 
 struct FileInfo {
 	string name;
@@ -31,8 +46,7 @@ string format_file_time(fs::file_time_type ftime) {
 	);
 	time_t cftime = chrono::system_clock::to_time_t(sctp);
 	char buffer[20];
-	struct tm timeinfo;
-	localtime_s(&timeinfo, &cftime);
+	tm timeinfo = make_local_time(cftime);
 	strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M", &timeinfo);
 	return buffer;
 }

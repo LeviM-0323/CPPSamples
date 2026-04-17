@@ -1,0 +1,68 @@
+name: Linux C++ Build and Release
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install build tools
+        run: sudo apt-get update && sudo apt-get install -y g++ zip
+
+      - name: Build projects
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          staging_dir="$RUNNER_TEMP/linux"
+          mkdir -p "$staging_dir"
+
+          find . -name '*.vcxproj' -print0 | while IFS= read -r -d '' project_file; do
+            project_dir="$(dirname "$project_file")"
+            project_name="$(grep -oPm1 '(?<=<ProjectName>)[^<]+' "$project_file" || true)"
+
+            if [[ -z "$project_name" ]]; then
+              project_name="$(basename "$project_dir")"
+            fi
+
+            mapfile -t source_files < <(find "$project_dir" -maxdepth 1 -name '*.cpp' | sort)
+
+            if [[ "${#source_files[@]}" -eq 0 ]]; then
+              echo "No C++ sources found in $project_dir"
+              exit 1
+            fi
+
+            g++ -std=c++17 -O2 -pthread "${source_files[@]}" -o "$staging_dir/$project_name"
+          done
+
+      - name: Package source archive
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          source_archive="$RUNNER_TEMP/CppSamples-source-${GITHUB_SHA}.zip"
+          git ls-files '*.cpp' '*.hpp' '*.h' '*.sln' '*.vcxproj' '*.filters' 'README.md' '.github/workflows/*.yml' > "$RUNNER_TEMP/source-files.txt"
+          zip -q -@ "$source_archive" < "$RUNNER_TEMP/source-files.txt"
+          echo "SOURCE_ARCHIVE=$source_archive" >> "$GITHUB_ENV"
+
+      - name: Upload Linux release assets
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ci-${{ github.sha }}
+          name: CI build ${{ github.sha }}
+          files: |
+            ${{ runner.temp }}/linux/*
+            ${{ env.SOURCE_ARCHIVE }}
+          overwrite_files: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

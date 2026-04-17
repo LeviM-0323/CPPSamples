@@ -29,6 +29,15 @@ string formatCurrency(double value) {
 	return oss.str();
 }
 
+void clearScreen() {
+#ifdef _WIN32
+    system("cls");
+#else
+    cout << "\033[2J\033[H";
+    cout.flush();
+#endif
+}
+
 int getScreenWidth() {
 #ifdef _WIN32
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
@@ -61,7 +70,32 @@ void setColor(int color) {
 }
 #else
 void setColor(int color) {
-    cout << "\033[" << color << "m";
+    switch (color) {
+    case 1:
+        cout << "\033[34m";
+        break;
+    case 2:
+        cout << "\033[32m";
+        break;
+    case 3:
+        cout << "\033[36m";
+        break;
+    case 4:
+        cout << "\033[31m";
+        break;
+    case 5:
+        cout << "\033[35m";
+        break;
+    case 6:
+        cout << "\033[33m";
+        break;
+    case 12:
+        cout << "\033[91m";
+        break;
+    default:
+        cout << "\033[0m";
+        break;
+    }
 }
 #endif
 
@@ -76,11 +110,11 @@ void resetColor() {
 void uselessLoadingScreen(int loops) {
 	const string frames[] = { "[|]", "[/]", "[-]", "[\\]" };
 	for (int i = 0; i < loops * 4; i++) {
-		system("cls");
+        clearScreen();
 		centerText("Loading " + frames[i % 4] + "\n");
 		this_thread::sleep_for(chrono::milliseconds(100));
 	}
-    system("cls");
+    clearScreen();
 }
 
 string getSymbol(int num) {
@@ -115,7 +149,7 @@ void spinAnimation(vector<vector<int>>& grid, mt19937& gen, uniform_int_distribu
                 grid[i][j] = dist(gen);
             }
         }
-        system("cls");
+        clearScreen();
         centerText("Spinning...\n");
         displayGrid(grid);
         this_thread::sleep_for(chrono::milliseconds(150));
@@ -157,7 +191,7 @@ bool checkWin(const vector<vector<int>>& grid, double bet, double& payout) {
 
 void mainMenu(double& balance, double& sessionNet) {
     while (true) {
-        system("cls"); // Clear the screen
+        clearScreen();
         setColor(3);
         centerText("Welcome to the Fake Gambling Game!\n");
         resetColor();
@@ -265,7 +299,7 @@ int main() {
         vector<vector<int>> grid(3, vector<int>(3));
 
         spinAnimation(grid, gen, dist);
-        system("cls");
+        clearScreen();
         displayGrid(grid);
 
         if (checkWin(grid, bet, payout)) {
