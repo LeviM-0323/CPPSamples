@@ -20,10 +20,11 @@ jobs:
         uses: microsoft/setup-msbuild@v2
 
       - name: Build projects
-        shell: cmd
+        shell: pwsh
         run: |
-          if not exist "%RUNNER_TEMP%\windows" mkdir "%RUNNER_TEMP%\windows"
-          msbuild .\CppSamples.sln /p:Configuration=Release /p:Platform=x64 /p:OutDir="%RUNNER_TEMP%\windows\" /p:LanguageStandard=stdcpp17
+          $stagingDir = Join-Path $env:RUNNER_TEMP 'windows'
+          New-Item -ItemType Directory -Force -Path $stagingDir | Out-Null
+          & msbuild .\CppSamples.sln /p:Configuration=Release /p:Platform=x64 /p:OutDir=$stagingDir /p:LanguageStandard=stdcpp17
 
       - name: Upload Windows release assets
         uses: softprops/action-gh-release@v2
