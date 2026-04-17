@@ -19,6 +19,15 @@ jobs:
       - name: Install build tools
         run: sudo apt-get update && sudo apt-get install -y g++
 
+      - name: Generate release timestamp
+        id: timestamp
+        shell: bash
+        run: |
+          timestamp=$(date +'%Y-%m-%d %H:%M')
+          echo "timestamp=$timestamp" >> $GITHUB_OUTPUT
+          tag=$(date +'build-%Y-%m-%d-%H%M')
+          echo "tag=$tag" >> $GITHUB_OUTPUT
+
       - name: Build projects
         shell: bash
         run: |
@@ -48,8 +57,8 @@ jobs:
       - name: Upload Linux release assets
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ci-${{ github.sha }}
-          name: CI build ${{ github.sha }}
+          tag_name: ${{ steps.timestamp.outputs.tag }}
+          name: Build ${{ steps.timestamp.outputs.timestamp }}
           files: |
             ${{ runner.temp }}/linux/*
           overwrite_files: true

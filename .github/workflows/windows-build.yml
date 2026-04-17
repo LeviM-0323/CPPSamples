@@ -19,6 +19,15 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
+      - name: Generate release timestamp
+        id: timestamp
+        shell: pwsh
+        run: |
+          $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm"
+          "timestamp=$timestamp" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          $tag = Get-Date -Format "build-yyyy-MM-dd-HHmm"
+          "tag=$tag" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+
       - name: Build projects
         shell: pwsh
         run: |
@@ -29,8 +38,8 @@ jobs:
       - name: Upload Windows release assets
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ci-${{ github.sha }}
-          name: CI build ${{ github.sha }}
+          tag_name: ${{ steps.timestamp.outputs.tag }}
+          name: Build ${{ steps.timestamp.outputs.timestamp }}
           files: |
             ${{ runner.temp }}/windows/*.exe
           overwrite_files: true
