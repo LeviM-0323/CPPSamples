@@ -14,6 +14,8 @@ Master TODO list:
 */
 
 #include <iostream>
+#include <string>
+#include <cstdlib>
 #include <vector>
 #include <random>
 #include <algorithm>

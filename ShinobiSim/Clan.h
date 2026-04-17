@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 #include <iostream>
+#include <algorithm>
+#include <initializer_list>
 #include <vector>
 #include "KekkeiGenkai.h"
 

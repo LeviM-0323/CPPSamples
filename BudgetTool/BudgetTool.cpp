@@ -19,17 +19,25 @@
 #include <fstream>
 #include <string>
 #include <ctime>
+#include <chrono>
 #include <cstdlib>
 
 namespace {
 	tm make_local_time(time_t value) {
 		tm localTime{};
-#ifdef _WIN32
-		localtime_s(&localTime, &value);
-#else
-		localtime_r(&value, &localTime);
-#endif
+		if (tm* local = std::localtime(&value)) {
+			localTime = *local;
+		}
 		return localTime;
+	}
+
+	void clearScreen() {
+#ifdef _WIN32
+		system("cls");
+#else
+		cout << "\033[2J\033[H";
+		cout.flush();
+#endif
 	}
 
 }
@@ -61,7 +69,7 @@ void printMenu() {
 	cout << "0. Exit\n";
 	cout << "Select an option: ";
 	cin >> menuOption;
-	system("cls");
+	clearScreen();
 }
 
 /**

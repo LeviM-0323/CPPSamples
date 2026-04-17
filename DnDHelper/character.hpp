@@ -1,6 +1,8 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
+#include <random>
+#include <vector>
 #include "item.hpp"
 
 using namespace std;

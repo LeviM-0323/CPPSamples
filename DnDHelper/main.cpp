@@ -4,6 +4,7 @@
 #include <random>
 #include <algorithm>
 #include <vector>
+#include <cstdlib>
 #include "character.hpp"
 
 using namespace std;

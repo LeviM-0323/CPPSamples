@@ -13,7 +13,6 @@ Purpose: This project will act as a simple file utility in C++ ran from the comm
 #include <ctime>
 #include <algorithm>
 #include <vector>
-#define _CRT_SECURE_NO_WARNINGS
 
 using namespace std;
 namespace fs = std::filesystem;
@@ -21,11 +20,9 @@ namespace fs = std::filesystem;
 namespace {
 	tm make_local_time(time_t value) {
 		tm localTime{};
-#ifdef _WIN32
-		localtime_s(&localTime, &value);
-#else
-		localtime_r(&value, &localTime);
-#endif
+		if (tm* local = std::localtime(&value)) {
+			localTime = *local;
+		}
 		return localTime;
 	}
 

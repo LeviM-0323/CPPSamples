@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <memory> // For smart pointers
+#include <cstdint>
 
 using namespace std;
 
